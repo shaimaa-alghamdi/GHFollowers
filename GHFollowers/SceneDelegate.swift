@@ -14,11 +14,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+    
+        //MARK: STEP 1 add this func
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
+        window?.windowScene = windowScene
+        window?.rootViewController = tabBar()
+        window?.makeKeyAndVisible()
+        
     }
+    
+    //MARK: STEP 2 CREATE NAVIGATIONCONTROOLER
+    func searchNavigationVC() -> UINavigationController{
+        let search = SearchVC()
+        search.title = "SEARCH"
+        //TAG = 0 , becouse it's the first one view in the left
+        search.tabBarItem = UITabBarItem.init(tabBarSystemItem: .search, tag: 0)
+        return UINavigationController.init(rootViewController: search)
+    }
+    func favoritesNavigationVC() ->UINavigationController{
+        let favorites = FavoritesVC()
+        favorites.title = "FAVORITES"
+        // TAG = 1 , becouse it's the next press :)
+        favorites.tabBarItem = UITabBarItem.init(tabBarSystemItem: .favorites, tag: 1)
+        return UINavigationController.init(rootViewController: favorites)
+    }
+
+    
+    //MARK:STEP 3 CREATE THE TABBAR AND ADDING THESE NAVIGATIONS ON AS ARRAY.
+    func tabBar() -> UITabBarController{
+        let tabBar = UITabBarController()
+        UITabBar.appearance().tintColor = .systemGreen
+        tabBar.viewControllers = [searchNavigationVC(),favoritesNavigationVC()]
+        
+        return tabBar
+    }
+    
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
